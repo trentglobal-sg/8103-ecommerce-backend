@@ -1,5 +1,5 @@
 const express = require('express');
-const pool = require('../database')
+const productService = require('../services/productService')
 
 // create a new router object
 const router = express.Router();
@@ -7,16 +7,14 @@ const router = express.Router();
 
 // Get all the products
 router.get('/', async function(req,res){
-    const [rows] = await pool.execute("SELECT * FROM products");
-    res.json({
-        'message': rows
-    })
+    const products = await productService.getAllProducts();
+    res.json(products);
 })
 
-router.get('/:id', function(req,res){
-    res.json({
-        'message': "Getting product with ID " + req.params.id
-    })
+// Get a product by ID
+router.get('/:id', async  function(req,res){
+    const product = await productService.getProductById(req.params.id);
+    res.json(product);
 })
 
 module.exports = router;
