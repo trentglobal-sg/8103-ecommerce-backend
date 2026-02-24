@@ -8,6 +8,7 @@ const pool = require('./database');
 const productRouter = require('./routers/products');
 const userRouter = require('./routers/users');
 const cartRouter = require('./routers/cart');
+const checkoutRouter = require('./routers/checkout')
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.get('/', (req,res)=>{
 app.use("/api/products", productRouter);
 app.use("/api/users", userRouter);
 app.use('/api/cart', cartRouter);
+app.use('/api/checkout', checkoutRouter);
 
 app.listen(process.env.PORT || 3000, function(){
     console.log("server is running");
