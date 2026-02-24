@@ -18,18 +18,20 @@ async function createOrder(userId, orderItems) {
     const connection = await pool.getConnection();
     try {
         await connection.beginTransaction();
-
+        console.log(orderItems);
         // calculate the total
-        const total = orderItems.reduce(function(sum, item){
-            return sum + item.price
-        });
+        const total = orderItems.reduce(function (sum, item) {
+            return sum + (item.price * item.quantity)
+        }, 0);
 
         // create the row in the orders table
         const [orderResult] = await connection.execute(`
             INSERT INTO orders (user_id, total ) VALUES(?, ?)
         `, [userId, total]);
 
+        console.log("order result =", orderResult);
         const newOrderId = orderResult.insertId;
+
 
         // for each item the user is buying, create one row in order items table
         for (let item of orderItems) {
@@ -37,9 +39,11 @@ async function createOrder(userId, orderItems) {
             await connection.execute(sql, [newOrderId, item.product_id, item.quantity])
         }
         await connection.commit();
-        return orderId
+        return newOrderId;
     } catch (e) {
         await connection.rollback();
+        console.error(e);
+        throw (e);
     } finally {
         await connection.release();
     }

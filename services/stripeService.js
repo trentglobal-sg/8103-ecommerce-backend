@@ -13,6 +13,8 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
  * @param {*} orderId 
  */
 async function createCheckoutSession(userId, orderItems, orderId) {
+    console.log("orderId = ", orderId);
+   
     // 1. create line items
     const lineItems = createLineItems(orderItems);
 
