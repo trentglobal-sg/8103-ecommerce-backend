@@ -4,7 +4,6 @@ require('dotenv').config();
 
 // make sure all libraries requires
 // come first first, the your own modules
-const pool = require('./database');
 const productRouter = require('./routers/products');
 const userRouter = require('./routers/users');
 const cartRouter = require('./routers/cart');
